@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
+from django.core.validators import RegexValidator
+alpha=RegexValidator(r'^[a-zA-Z]{3,}','only alphabets are allowed and name should be more than 3 charachets')
+numbers=RegexValidator('^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$','Enter a Valid Indian Phone Number')
 # Create your models here.
 class MyAccountmanager(BaseUserManager):
     def create_user(self,first_name,last_name,username,email,password=None):
@@ -33,11 +36,11 @@ class MyAccountmanager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
-    first_name=models.CharField( max_length=50)
+    first_name=models.CharField( max_length=50,validators=[alpha])
     last_name=models.CharField( max_length=50)
     username=models.CharField( max_length=50)
     email=models.EmailField(max_length=254,unique=True)
-    phone_number=models.CharField( max_length=50)
+    phone_number=models.CharField( max_length=10,validators=[numbers])
     date_joined=models.DateTimeField(auto_now_add=True)
     last_login=models.DateTimeField( auto_now_add=True)
     is_admin=models.BooleanField(default=False)
