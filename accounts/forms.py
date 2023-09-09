@@ -1,6 +1,6 @@
 # from django.forms import ModelForm
 from django import forms
-from . models import Account
+from . models import Account,UserProfile
 from django.contrib.auth.password_validation import validate_password
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -32,3 +32,23 @@ class Registrationform(forms.ModelForm):
         if Account.objects.filter(phone=phone).exists():
             raise ValidationError("An user with this phone number already exists!")
         return phone
+    
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model=Account
+        fields=['first_name','last_name','phone_number']
+    def __init__(self,*args, **kwargs):
+        super(UserForm,self).__init__(*args,**kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control' 
+
+class UserProfileForm(forms.ModelForm):
+    profile_picture=forms.ImageField(required=False,error_messages={'invalid':("Image files only")},widget=forms.FileInput)
+    class Meta:
+        fields=['address_line_1','address_line_2','city','state','country','profile_picture']
+        model=UserProfile
+    def __init__(self,*args, **kwargs):
+        super(UserProfileForm,self).__init__(*args,**kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
