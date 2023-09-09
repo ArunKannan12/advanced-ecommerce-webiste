@@ -21,7 +21,17 @@
             {% csrf_token %}
             <article class="content-body">
               <h2 class="title">{{single_product.product_name}}</h2>
-
+              <div class="rating-star">
+                <span>
+                  <i class="fa  fa-star{% if single_product.averageReview < 0.5 %}-half-stroke{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if single_product.averageReview < 1.5 %}-half-stroke{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if single_product.averageReview < 2.5 %}-half-stroke{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if single_product.averageReview < 3.5 %}-half-stroke{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if single_product.averageReview < 4.5 %}-half-stroke{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  (<span>{{single_product.countReview}} reviews</span>)
+                </span>
+              </div>
+              
               <div class="mb-3">
                 <var class="price h4">{{single_product.price}}</var>
               </div>
@@ -90,7 +100,7 @@
 					{% csrf_token %}
 					
 					<h5>Write Your Review</h5>
-					{% comment %} <p>{{single_product.averageReview}}</p> {% endcomment %}
+					<p>{{single_product.averageReview}}</p>
 
 					<div>
 						<!-- Rating stars -->
@@ -132,8 +142,20 @@
         {% include 'includes/alert.html' %}
         <br>
         <header class="section-heading">
-          <h3>Customer Reviews</h3>
+          <h3>Customer Reviews</h3> 
+          <div class="rating-star">
+            <span>
+              <i class="fa  fa-star{% if single_product.averageReview < 0.5 %}-half-stroke{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-stroke {% endif %}" aria-hidden="true"></i>
+              <i class="fa  fa-star{% if single_product.averageReview < 1.5 %}-half-stroke{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-stroke {% endif %}" aria-hidden="true"></i>
+              <i class="fa  fa-star{% if single_product.averageReview < 2.5 %}-half-stroke{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-stroke {% endif %}" aria-hidden="true"></i>
+              <i class="fa  fa-star{% if single_product.averageReview < 3.5 %}-half-stroke{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-stroke {% endif %}" aria-hidden="true"></i>
+              <i class="fa  fa-star{% if single_product.averageReview < 4.5 %}-half-stroke{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-stroke {% endif %}" aria-hidden="true"></i>
+              
+            </span>
+          </div>
+          <span>{{single_product.countReview}} reviews</span>
         </header>
+        {% for review in reviews %}
         <article class="box mb-3">
           <div class="icontext w-100">
             <img
@@ -141,20 +163,29 @@
               class="img-xs icon rounded-circle"
             />
             <div class="text">
-              <span class="date text-muted float-md-right">24.04.2020 </span>
-              <h6 class="mb-1">Mike John</h6>
+              <span class="date text-muted float-md-right">{{review.created_at}} </span>
+              <h6 class="mb-1">{{review.user.fullname |capfirst}}</h6>
+              
+              <div class="rating-star">
+                <span>
+                  <i class="fa  fa-star{% if review.rating == 0.5 %}-half-stroke{% elif review.rating < 1 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if review.rating == 1.5 %}-half-stroke{% elif review.rating < 2 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if review.rating == 2.5 %}-half-stroke{% elif review.rating < 3 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if review.rating == 3.5 %}-half-stroke{% elif review.rating < 4 %}-stroke {% endif %}" aria-hidden="true"></i>
+                  <i class="fa  fa-star{% if review.rating == 4.5 %}-half-stroke{% elif review.rating < 5 %}-stroke {% endif %}" aria-hidden="true"></i>
+                </span>
+              </div>
             </div>
           </div>
           <!-- icontext.// -->
           <div class="mt-3">
+            <h6>{{review.subject}}</h6>
             <p>
-              Dummy comment Lorem ipsum dolor sit amet, consectetur adipisicing
-              elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-              aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-              laboris nisi ut aliquip
+              {{review.review}}
             </p>
           </div>
         </article>
+        {% endfor %}
       </div>
       <!-- col.// -->
     </div>
