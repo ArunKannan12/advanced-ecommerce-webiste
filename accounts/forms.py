@@ -4,6 +4,9 @@ from . models import Account,UserProfile
 from django.contrib.auth.password_validation import validate_password
 from django.core import validators
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import SetPasswordForm,PasswordChangeForm
+
+
 class Registrationform(forms.ModelForm):
     password=forms.CharField(validators=[validate_password],widget=forms.PasswordInput(attrs={'placeholder':'enter password'}))
     confirm_password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'confirm password'}))
