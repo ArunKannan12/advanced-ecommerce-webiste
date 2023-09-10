@@ -138,8 +138,10 @@ def activate(request,uidb64,token):
 def dashboard(request):
     order=Order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
     order_count=order.count()
+    userprofile=UserProfile.objects.get(user_id=request.user.id)
     context={
-        'order_count':order_count
+        'order_count':order_count,
+        'userprofile':userprofile
     }
     return render(request,'store\dashboard.html',context)
 
@@ -256,3 +258,16 @@ def change_password(request):
            
         }
     return render(request,'accounts/change_password.html',context)
+@login_required(login_url='login')
+def order_detail(request,order_id):
+    order_detail=OrderedProduct.objects.filter(order__order_number=order_id)
+    order=Order.objects.get(order_number=order_id)
+    sub_total=0
+    for i in order_detail:
+        sub_total+=i.product_price*i.quantity
+    context={
+        'order_detail':order_detail,
+        'order':order,
+        'sub_total':sub_total
+    }
+    return render(request,'accounts/order_detail.html',context)
