@@ -4,6 +4,14 @@ from store import views
 
 urlpatterns = [
     path("",views.store,name="store"),
+    path('mobile/', views.mobile, name='mobile'),
+    path('mobile/<slug:data>/', views.mobile, name='mobiledata'),
+    path('laptop/', views.laptop, name='laptop'),
+    path('laptop/<slug:data>/', views.laptop, name='laptopdata'),
+    path('tv/', views.tv, name='tv'),
+    path('tv/<slug:data>/', views.tv, name='tvdata'),
+     path('mens/', views.mens, name='mens'),
+    path('mens/<slug:data>/', views.mens, name='mensdata'),
     path("category/<slug:category_slug>/", views.store, name="product_by_category"),
     path("category/<slug:category_slug>/<slug:product_slug>/", views.product_detail, name="product_detail"),
     path("search/", views.search, name="search"),

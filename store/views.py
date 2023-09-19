@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404,HttpResponse,redirect
 from django.http import HttpResponse
-from .models import Product,ReviewRating,ProductGalery
+from .models import Product,ReviewRating,ProductGalery,UserProfile
 from django.db.models import Q
 from category.models import Category
 from carts.models import Cart_item,Carts
@@ -10,6 +10,8 @@ from .forms import ReviewForm
 from django.contrib import messages
 from orders.models import OrderedProduct,Order
 # Create your views here.
+
+
 def store(request,category_slug=None):
     categories=None
     products=None
@@ -26,14 +28,18 @@ def store(request,category_slug=None):
         page=request.GET.get('page')
         paged_products=paginator.get_page(page)
         product_count=products.count()
+    
+    
     context={
         'products':paged_products,
         'product_count':product_count,
+        
         
     }
     return render(request,'store/store.html',context)
 
 def product_detail(request,category_slug,product_slug):
+    
     try:
         single_product=Product.objects.get(category__slug=category_slug,slug=product_slug)
         in_cart=Cart_item.objects.filter(cart__cart_id=_cart_id(request),product=single_product).exists()
@@ -50,7 +56,7 @@ def product_detail(request,category_slug,product_slug):
     #get the reviews 
 
     reviews=ReviewRating.objects.filter(product_id=single_product.id,status=True)
-
+    
     #get th eproduct gallery
 
 
@@ -61,7 +67,9 @@ def product_detail(request,category_slug,product_slug):
         'in_cart':in_cart,
         'orderproduct':orderproduct,
         'reviews':reviews,
-        'product_gallery':product_gallery
+        'product_gallery':product_gallery,
+       
+        
     }
     return render (request,'store/product-detail.html',context)
 def search(request):
@@ -98,3 +106,149 @@ def submit_review(request,product_id):
                 data.save()
                 messages.success(request, 'Thank you! Your review has been submitted.')
                 return redirect(url)
+
+
+def mobile(request,data=None):
+ 
+  if data==None:
+     mobiles=Product.objects.filter(category__category_name='Mobile')
+     paginator=Paginator(mobiles,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=mobiles.count()
+  elif data in ['redmi','samsung','realme','iphone','asus','poco','nokia','lg','vivo','oppo']:
+     mobiles=Product.objects.filter(category__category_name='Mobile').filter(brand=data)
+     paginator=Paginator(mobiles,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=mobiles.count()
+   
+  elif data=='below':
+    mobiles=Product.objects.filter(category__category_name='Mobile').filter(new_price__lt=10000)
+    paginator=Paginator(mobiles,6)
+    page=request.GET.get('page')
+    paged_products=paginator.get_page(page)
+    product_count=mobiles.count()
+   
+  elif data=='above':
+    mobiles=Product.objects.filter(category__category_name='Mobile').filter(new_price__gt=10000)
+    paginator=Paginator(mobiles,6)
+    page=request.GET.get('page')
+    paged_products=paginator.get_page(page)
+    product_count=mobiles.count()
+
+  
+  context={
+   
+   'mobiles':paged_products,
+   
+   'mobiles_count':product_count
+    
+   
+  }
+  return render(request, 'mobile.html',context)
+
+def laptop(request,data=None):
+    if data==None:
+     laptop=Product.objects.filter(category__category_name='laptop')
+     paginator=Paginator(laptop,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=laptop.count()
+    elif data in ['dell','hp','asus','lenovo','mac']:
+     laptop=Product.objects.filter(category__category_name='laptop').filter(brand=data)
+     paginator=Paginator(laptop,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=laptop.count()
+   
+    elif data=='below':
+     
+     laptop=Product.objects.filter(category__category_name='laptop').filter(new_price__lt=10000)
+     paginator=Paginator(laptop,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=laptop.count()
+   
+    elif data=='above':
+     laptop=Product.objects.filter(category__category_name='laptop').filter(new_price__gt=10000)
+     paginator=Paginator(laptop,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=laptop.count()
+
+    context={
+       'laptop':paged_products,
+       'laptop_count':product_count,
+    }
+    return render(request, 'laptop.html',context)
+
+def tv(request,data=None):
+    if data==None:
+     tv=Product.objects.filter(category__category_name='T.V')
+     paginator=Paginator(tv,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=tv.count()
+    elif data in ['oneplus','samsung','kodak','mi','lg','redmi','vw','sansui']:
+     tv=Product.objects.filter(category__category_name='T.V').filter(brand=data)
+     paginator=Paginator(tv,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=tv.count()
+   
+    elif data=='below':
+     
+     tv=Product.objects.filter(category__category_name='T.V').filter(new_price__lt=15000)
+     paginator=Paginator(tv,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=tv.count()
+   
+    elif data=='above':
+     tv=Product.objects.filter(category__category_name='T.V').filter(new_price__gt=15000)
+     paginator=Paginator(tv,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=tv.count()
+
+    context={
+       'tv':paged_products,
+       'tv_count':product_count,
+    }
+    return render(request, 'tv.html',context)
+
+def mens(request,data=None):
+    if data==None:
+     mens=Product.objects.filter(category__category_name='mens')
+     paginator=Paginator(mens,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=mens.count()
+    elif data in ['casualshirt','formalshirt','jeans','cottonpant','formalshoes','casualshoes','innerwear','tshirt']:
+     mens=Product.objects.filter(category__category_name='men').filter(dress_type=data)
+     paginator=Paginator(mens,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=mens.count()
+   
+    elif data=='below':
+     
+     mens=Product.objects.filter(category__category_name='mens').filter(new_price__lt=1000)
+     paginator=Paginator(mens,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=mens.count()
+   
+    elif data=='above':
+     mens=Product.objects.filter(category__category_name='mens').filter(new_price__gt=1000)
+     paginator=Paginator(mens,6)
+     page=request.GET.get('page')
+     paged_products=paginator.get_page(page)
+     product_count=mens.count()
+
+    context={
+       'mens':paged_products,
+       'mens_count':product_count,
+    }
+    return render(request, 'mens.html',context)

@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+ {% load static %}
+  {% block title %}Buy Now{%endblock title %}
+{% block content %}
+
+<section class="section-pagetop bg">
+<div class="container">
+	{% if 'search' in request.path%}
+	<h2 class="title-page">Search Result</h2>
+  {% elif '/store/tv/' in request.path %}
+  <h2 class="title-page">Televisions</h2>
+	{% else %}
+	<h2 class="title-page">Our Store</h2>
+	{% endif %}
+</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION INTRO END// ========================= -->
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+<div class="container">
+
+<div class="row">
+	<aside class="col-md-3">
+		
+<div class="card">
+	 <article class="filter-group">
+		<header class="card-header">
+			<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+				<i class="icon-control fa fa-chevron-down"></i>
+				<h6 class="title">Categories</h6>
+			</a>
+		</header>
+		<div class="filter-content collapse show" id="collapse_1" style="">
+			<div class="card-body">
+					
+			<a
+			href="{% url "tvdata" 'samsung' %}"
+			class="list-group-item list-group-item-action"
+			aria-current="true"
+			>SAMSUNG</a>
+            <a
+			href="{% url "tvdata" 'oneplus' %}"
+			class="list-group-item list-group-item-action"
+			aria-current="true"
+			>ONEPLUS</a>
+            <a
+			href="{% url "tvdata" 'kodak' %}"
+			class="list-group-item list-group-item-action"
+			aria-current="true"
+			>KODAK</a>
+          <a
+			href="{% url "tvdata" 'mi' %}"
+			class="list-group-item list-group-item-action"
+			aria-current="true"
+			 >MI</a>
+          <a
+			 href="{% url "tvdata" 'lg' %}"
+		  class="list-group-item list-group-item-action"
+			  aria-current="true"
+				  >LG</a
+					>
+          <a
+					  href="{% url "tvdata" 'redmi' %}"
+					  class="list-group-item list-group-item-action"
+					  aria-current="true"
+					  >REDMI</a
+					>
+          <a
+					  href="{% url "tvdata" 'vw' %}"
+					  class="list-group-item list-group-item-action"
+					  aria-current="true"
+					  >VW</a
+					>
+                    <a
+			href="{% url "tvdata" 'sansui' %}"
+			class="list-group-item list-group-item-action"
+			aria-current="true"
+			>SANSUI</a>
+          
+	<a
+	  href="{% url "tvdata" 'above' %}"
+	  class="list-group-item list-group-item-action"
+	  aria-current="true"
+	  >Above 15000</a
+	>
+	<a
+	  href="{% url "tvdata" 'below' %}"
+	  class="list-group-item list-group-item-action"
+	  aria-current="true"
+	  >Below 15000</a
+	>
+					
+				
+					
+			   
+				 
+
+			</div>
+			<!-- card-body.// -->
+		</div>
+	</article> <!-- filter-group  .// --> 
+	<article class="filter-group">
+		
+	</article> <!-- filter-group .// -->
+	
+	 <!-- filter-group .// -->
+	
+</div> <!-- card.// -->
+
+	</aside> <!-- col.// -->
+	<main class="col-md-9">
+
+<header class="border-bottom mb-4 pb-3">
+		<div class="form-inline">
+			<span class="mr-md-auto"><b>{{tv_count}}</b> Items found </span>
+			
+		</div>
+</header><!-- sect-heading -->
+
+<div class="row">
+	{% if tv %}
+	{% for i in tv %}
+	{% if i.trending == 1 %}
+	<a href="{{i.get_url}}">
+		<div class="col-md-4">
+			<figure class="card card-product-grid">
+				<img src="{% static 'images\bargains_1147310.png' %}" alt="hot deal" title="hot deal" height="50px" width="50px">
+				<div class="img-wrap"> 
+					
+					<img src="{{i.image.url}}" >
+					
+				</div> <!-- img-wrap.// -->
+				<figcaption class="info-wrap ">
+					<div class="fix-height">
+						<a href="" class="title">{{i.product_name}}</a>
+						<div class="price-wrap mt-2">
+							<span class="price text-success mr-5">RS.{{i.new_price}}</span>
+              <span class="price text-danger"><s>MRP.{{i.old_price}}</s></span>
+						</div> <!-- price-wrap.// -->
+					</div>
+					<a href="{{i.get_url}}" class="btn btn-block btn-primary">view  details </a>	
+				</figcaption>
+			</figure>
+		</div> 
+	</a>
+	{% else %}
+	 <a href="{{i.get_url}}">
+		<div class="col-md-4">
+			<figure class="card card-product-grid">
+				<div class="img-wrap"> 
+					<img src="{{i.image.url}}">
+					
+				</div> <!-- img-wrap.// -->
+				<figcaption class="info-wrap">
+					<div class="fix-height">
+						<a href="" class="title">{{i.product_name}}</a>
+						<div class="price-wrap mt-2">
+							<span class="price text-success mr-5">RS.{{i.new_price}}</span>
+              <span class="price text-danger"><s>MRP.{{i.old_price}}</s></span>
+						</div> <!-- price-wrap.// -->
+					</div>
+					<a href="{{i.get_url}}" class="btn btn-block btn-primary">view details </a>	
+				</figcaption>
+			</figure>
+		</div> 
+	</a> 
+	{% endif %}
+	
+<!-- col.// -->
+	{% endfor %}
+	{% else %}
+	<div>
+		<h2 class="text-center text-danger" style="margin-left:150px;margin-top:150px;">No result found</h2>
+	</div>
+	{% endif %}
+</div> <!-- row end.// -->
+
+
+<nav class="mt-4" aria-label="Page navigation sample">
+	{% if tv.has_other_pages %}
+  <ul class="pagination">
+	{% if tv.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{tv.previous_page_number}}">Previous</a></li>
+	{% else %}
+	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+	{% endif %}
+	{% for i in tv.paginator.page_range %}
+		{% if tv.number == i %}
+    		<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+		{% else %}
+		<li class="page-item "><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+		{% endif %}
+    {% endfor %}
+	{% if tv.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{tv.next_page_number}}">Next</a></li>
+	{% else %}
+	<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+	{% endif %}
+  </ul>
+  {% endif %}
+</nav>
+
+	</main> <!-- col.// -->
+
+</div>
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+<!-- ========================= FOOTER ========================= -->
+
+{% endblock content %}

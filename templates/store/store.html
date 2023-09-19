@@ -23,7 +23,7 @@
 	<aside class="col-md-3">
 		
 <div class="card">
-	<article class="filter-group">
+	 <article class="filter-group">
 		<header class="card-header">
 			<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
 				<i class="icon-control fa fa-chevron-down"></i>
@@ -32,50 +32,42 @@
 		</header>
 		<div class="filter-content collapse show" id="collapse_1" style="">
 			<div class="card-body">
-				
-				<ul class="list-menu">
-				<li><a href="{% url 'store' %}">All Products</a></li>
-				{% for i in links %}
-				<li><a href="{{i.get_url}}">{{i.category_name}}</a></li>
-				{% endfor %}
-				</ul>
 
-			</div> <!-- card-body.// -->
+					{% if '/store/category/mobile/' in request.path %}
+					<a
+					  href="{% url "mobile" %}"
+					  class="list-group-item list-group-item-action"
+					  aria-current="true"
+					  >Filter by brand</a
+					>
+					{% elif '/store/category/laptop/' in request.path %}
+					<a
+					  href="{% url "laptop" %}"
+					  class="list-group-item list-group-item-action"
+					  aria-current="true"
+					  >Filter by brand</a
+					>
+					{% elif '/store/category/men/' in request.path %}
+					<a
+					  href="{% url "mens" %}"
+					  class="list-group-item list-group-item-action"
+					  aria-current="true"
+					  >Filter all mens wear</a
+					>
+					{% endif %}
+					
+			   
+				 
+
+			</div>
+			<!-- card-body.// -->
 		</div>
-	</article> <!-- filter-group  .// -->
+	</article> <!-- filter-group  .// --> 
 	<article class="filter-group">
-		<header class="card-header">
-			<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
-				<i class="icon-control fa fa-chevron-down"></i>
-				<h6 class="title">Sizes </h6>
-			</a>
-		</header>
-		<div class="filter-content collapse show" id="collapse_4" style="">
-			<div class="card-body">
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> XS </span>
-			  </label>
-
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> SM </span>
-			  </label>
-
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> LG </span>
-			  </label>
-
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> XXL </span>
-			  </label>
-		</div><!-- card-body.// -->
-		</div>
+		
 	</article> <!-- filter-group .// -->
 	
-	<article class="filter-group">
+	{% comment %} <article class="filter-group">
 		<header class="card-header">
 			<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
 				<i class="icon-control fa fa-chevron-down"></i>
@@ -115,7 +107,7 @@
 				<button class="btn btn-block btn-primary">Apply</button>
 			</div><!-- card-body.// -->
 		</div>
-	</article> <!-- filter-group .// -->
+	</article> <!-- filter-group .// --> {% endcomment %}
 	
 </div> <!-- card.// -->
 
@@ -132,25 +124,52 @@
 <div class="row">
 	{% if products %}
 	{% for i in products %}
+	{% if i.trending == 1 %}
 	<a href="{{i.get_url}}">
-	<div class="col-md-4">
-		<figure class="card card-product-grid">
-			<div class="img-wrap"> 
-				<img src="{{i.image.url}}">
-				
-			</div> <!-- img-wrap.// -->
-			<figcaption class="info-wrap">
-				<div class="fix-height">
-					<a href="" class="title">{{i.product_name}}</a>
-					<div class="price-wrap mt-2">
-						<span class="price">{{i.price}}</span>
-					</div> <!-- price-wrap.// -->
-				</div>
-				<a href="{{i.get_url}}" class="btn btn-block btn-primary">view details </a>	
-			</figcaption>
-		</figure>
-	</div> 
-</a>
+		<div class="col-md-4">
+			<figure class="card card-product-grid">
+				<img src="{% static 'images\bargains_1147310.png' %}" alt="hot deal" title="hot deal" height="50px" width="50px">
+				<div class="img-wrap"> 
+					
+					<img src="{{i.image.url}}" >
+					
+				</div> <!-- img-wrap.// -->
+				<figcaption class="info-wrap ">
+					<div class="fix-height">
+						<a href="" class="title">{{i.product_name}}</a>
+						<div class="price-wrap mt-2">
+							<span class="price text-success  mr-5">RS.{{i.new_price}}</span>
+							<span class="price text-danger"><s>MRP.{{i.old_price}}</s></span>
+						</div> <!-- price-wrap.// -->
+					</div>
+					<a href="{{i.get_url}}" class="btn btn-block btn-primary">view  details </a>	
+				</figcaption>
+			</figure>
+		</div> 
+	</a>
+	{% else %}
+	 <a href="{{i.get_url}}">
+		<div class="col-md-4">
+			<figure class="card card-product-grid">
+				<div class="img-wrap"> 
+					<img src="{{i.image.url}}">
+					
+				</div> <!-- img-wrap.// -->
+				<figcaption class="info-wrap">
+					<div class="fix-height">
+						<a href="{{i.get_url}}" class="title">{{i.product_name}}</a>
+						<div class="price-wrap mt-2">
+							<span class="price text-success  mr-5">RS.{{i.new_price}}</span>
+							<span class="price text-danger"><s>MRP.{{i.old_price}}</s></span>
+						</div> <!-- price-wrap.// -->
+					</div>
+					<a href="{{i.get_url}}" class="btn btn-block btn-primary">view details </a>	
+				</figcaption>
+			</figure>
+		</div> 
+	</a> 
+	{% endif %}
+	
 <!-- col.// -->
 	{% endfor %}
 	{% else %}
